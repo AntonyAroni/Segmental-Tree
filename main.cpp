@@ -34,7 +34,8 @@ class SegmentTree{
 private:
     Node<T>* m_root;
     vector<int> nums;
-    //insertar
+
+    //insertion
     Node<T>* buildTree(int l, int r){
         if(l==r)
             return new Node(nums[l],l,r);
@@ -46,6 +47,7 @@ private:
         node->m_data = node->m_left->m_data + node->m_right->m_data;
         return node;
     }
+    //single insertion
     void insert(vector<int>& num, int val){
         num.push_back(val);
         m_root = buildTree(0,nums.size()-1);
@@ -68,7 +70,6 @@ private:
             return node;
         }
     }
-    //
     //delete node
     Node<T>* deleteNode(int l, int r, Node<T>* node){
         if(node->l == l && node->r == r){
@@ -101,7 +102,7 @@ private:
         node->m_data = node->m_left->m_data + node->m_right->m_data;
         return node;
     }
-    //
+    //update node
     void updateTree(Node<T>* node, int pos, int val){
         if(node->l==node->r){
             node->m_data = val;
@@ -115,7 +116,7 @@ private:
 
         node->m_data = node->m_left->m_data + node->m_right->m_data;
     }
-    //valores de la suma en intervalos
+    //interval sum
     int queryTree(Node<T>* node, int l, int r){
         if(l==node->l && r==node->r)
             return node->m_data;
@@ -129,7 +130,7 @@ private:
     }
 
 
-    //graficadora
+    //graphics
     void dot(ofstream &file, Node<T>* current){
         if (current==nullptr)
         {
@@ -142,7 +143,7 @@ private:
     }
 
 public:
-    //funciones publicas para el llamado acortado
+    //public function
     explicit SegmentTree(vector<int>& nums){
         this->nums = nums;
         m_root = buildTree(0,nums.size()-1);
@@ -161,11 +162,13 @@ public:
     }
     void searchNode(int l, int r){
         Node<T>*node = searchNode(l, r, m_root);
+     }
+    void searchNode_viewData(int l, int r){
+        Node<T>*node = searchNode(l, r, m_root);
         cout<<endl<<node->m_data;
     }
-
-
-    void dot(string filename){
+    
+    void dot(const string& filename){
         ofstream mydot;
         mydot.open(filename, ios::out);
 
@@ -178,15 +181,14 @@ public:
 
 };
 int main() {
-    vector<int> nums{2,3,4,10,15,31};
+    vector<int> nums{2,3};
     auto T1 = SegmentTree<int>(nums);
-//    T1.insert(14);
-//    T1.insert(20);
-//    T1.insert(30);
-//    T1.insert(51);
-//    T1.update(0,15);
-    T1.update(2,9);
-    T1.searchNode(4,4);
+    T1.insert(1);
+    T1.insert(10);
+    T1.insert(15);
+    T1.insert(31);
+    T1.update(2,4);
+    T1.searchNode_viewData(4,4);
     T1.dot("tree.dot");
 
     return 0;
